@@ -94,9 +94,9 @@ body .card .count, body .card span, body .card .icon i.fa {
 (function() {
   var user = location.search.replace("?", "");
   if (user !== undefined && user !== "")
-    exec();
+    exec(user);
   
-  function exec() {
+  function exec(user) {
     var abbrev = {
     	1e3: "K",
     	1e6: "M"
@@ -104,7 +104,7 @@ body .card .count, body .card span, body .card .icon i.fa {
     
     aja()
     	.method("GET")
-    	.url('http://api.soundcloud.com/users/jczimm?consumer_key=8bcccc3476eaa137a084c9f0c041915f')
+    	.url('http://api.soundcloud.com/users/'+user+'?consumer_key=8bcccc3476eaa137a084c9f0c041915f')
     	.on('200', function(res) {
     		var followersCount = res.followers_count;
     		Object.keys(abbrev).map(function(k) {
