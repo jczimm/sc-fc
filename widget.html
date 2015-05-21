@@ -93,8 +93,8 @@ body .card .count, body .card span, body .card .icon i.fa {
 
 <script>
 (function() {
-  var user = location.href.split("/").pop();
-  if (user === undefined || user === "soundcloud-followers-count")
+  var user = location.search.replace("?", "");
+  if (user !== undefined && user !== "")
     exec();
   
   function exec() {
