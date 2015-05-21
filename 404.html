@@ -4,16 +4,125 @@
 
 <head>
   <title>SoundCloud Followers Count Widget by jczimm</title>
+  
+  <script src="//cdn.rawgit.com/krampstudio/aja.js/1ef8622dc808188944a5d47eeda64a00cbd88164/aja.min.js"></script>
+  <script src="//cdn.polyfill.io/v1/polyfill.min.js"></script>
+  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  
+  <style>
+    @import url(http://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans+Condensed:300);
+body {
+  background-color: #1F282D;
+}
+body .card {
+  width: 145px;
+  height: 187px;
+  left: 50%;
+  top: 50%;
+  -webkit-transform: translate(-50%, -50%);
+      -ms-transform: translate(-50%, -50%);
+          transform: translate(-50%, -50%);
+  position: absolute;
+  opacity: 0;
+  -webkit-transition: .1s opacity;
+          transition: .1s opacity;
+  /*border: 1px solid #fff;
+  border-radius: 6px;*/
+}
+body .card.visible {
+  opacity: 1;
+  -webkit-animation: optimizeLegibility 1s;
+          animation: optimizeLegibility 1s;
+}
+body .card .icon {
+  position: relative;
+  top: .85em;
+}
+body .card .count {
+  font-family: "Montserrat";
+  font-size: 4em;
+  line-height: 1em;
+  bottom: 0.9em;
+}
+body .card span {
+  font-family: "Open Sans Condensed";
+  text-transform: uppercase;
+  font-size: 1.1em;
+  letter-spacing: 2px;
+  bottom: 1.1em;
+}
+body .card .count, body .card span, body .card .icon i.fa {
+  position: absolute;
+  left: 50%;
+  -webkit-transform: translateX(-50%);
+      -ms-transform: translateX(-50%);
+          transform: translateX(-50%);
+  color: #FFFFFF;
+}
+
+@-webkit-keyframes optimizeLegibility {
+  from {
+    text-rendering: auto;
+  }
+  to {
+    text-rendering: optimizeLegibility;
+  }
+}
+
+@keyframes optimizeLegibility {
+  from {
+    text-rendering: auto;
+  }
+  to {
+    text-rendering: optimizeLegibility;
+  }
+}
+
+  </style>
 </head>
 
 <body>
+  
+<div class="card">
+	<div class="icon">
+		<i class="fa fa-soundcloud fa-3x"></i>
+	</div>
+	<div class="count"></div>
+	<span>followers</span>
+</div>
 
 <script>
 (function() {
   var user = location.href.split("/").pop();
   if (user === undefined || user === "soundcloud-followers-count")
     exec();
-
+  
+  function exec() {
+    var abbrev = {
+    	1e3: "K",
+    	1e6: "M"
+    };
+    
+    aja()
+    	.method("GET")
+    	.url('http://api.soundcloud.com/users/jczimm?consumer_key=8bcccc3476eaa137a084c9f0c041915f')
+    	.on('200', function(res) {
+    		var followersCount = res.followers_count;
+    		Object.keys(abbrev).map(function(k) {
+    			k = +k;
+    			if (followersCount > k) {
+    				var a = followersCount / k,
+    					 short = a.toString().length > 3 ? Math.round(a * 10) / 10 : a;
+    				followersCount = short + abbrev[k];
+    			}
+    		});
+    		if (followersCount !== undefined) {
+    			$(".card .count").text(followersCount);
+    			$(".card").addClass("visible");
+    		}
+     	})
+    	.go();
+  }
 })();
     
 </script>
