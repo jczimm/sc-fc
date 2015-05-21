@@ -1,4 +1,4 @@
-# sc-fc: soundcloud followers count
+# sc-fc: soundcloud followers count widget
 
 Card that shows SoundCloud follower count using the SoundCloud REST API.
 
