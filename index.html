@@ -33,8 +33,6 @@ body .card {
 }
 body .card.visible {
   opacity: 1;
-  -webkit-animation: optimizeLegibility 1s;
-          animation: optimizeLegibility 1s;
 }
 body .card .icon {
   position: relative;
@@ -61,22 +59,6 @@ body .card .count, body .card span, body .card .icon i.fa {
           transform: translateX(-50%);
   color: #FFFFFF;
 }
-@-webkit-keyframes optimizeLegibility {
-  from {
-    text-rendering: auto;
-  }
-  to {
-    text-rendering: optimizeLegibility;
-  }
-}
-@keyframes optimizeLegibility {
-  from {
-    text-rendering: auto;
-  }
-  to {
-    text-rendering: optimizeLegibility;
-  }
-}
   </style>
 </head>
 
@@ -92,15 +74,22 @@ body .card .count, body .card span, body .card .icon i.fa {
 
 <script>
 (function() {
-  var user = location.search.replace("?", "");
-  if (user !== undefined && user !== "")
-    exec(user);
+  var user = window.location.search.replace("?", "");
+  if (user !== undefined && user !== "") {
+    var colors = window.location.hash.split(","),
+  	bg = colors[0],
+  	fg = colors[1];
+    exec(user, bg, fg);
+  }
   
-  function exec(user) {
+  function exec(user, bg, fg) {
     var abbrev = {
     	1e3: "K",
     	1e6: "M"
     };
+    
+    $("body").css("background-color", bg);
+    $("body .card .count, body .card span, body .card .icon i.fa").css("color", fg);
     
     aja()
     	.method("GET")
