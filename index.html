@@ -5,14 +5,13 @@
 <head>
   <title>SoundCloud Followers Count Widget by jczimm</title>
   
-  <script src="//cdn.rawgit.com/krampstudio/aja.js/1ef8622dc808188944a5d47eeda64a00cbd88164/aja.min.js"></script>
-  <script src="//cdn.polyfill.io/v1/polyfill.min.js"></script>
-  <script src="//cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+  <script src="https://cdn.polyfill.io/v1/polyfill.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
   
-  <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">
   
   <style>
-    @import url(http://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans+Condensed:300);
+@import url(https://fonts.googleapis.com/css?family=Montserrat:400,700|Open+Sans+Condensed:300);
 body {
   background-color: #1F282D;
 }
@@ -73,47 +72,47 @@ body .card .count, body .card span, body .card .icon i.fa {
 </div>
 
 <script>
-(function() {
+$(function() {
   var user = window.location.search.replace("?", "");
   if (user !== undefined && user !== "") {
     var colors = window.location.hash.split(","),
-  	bg = colors[0],
-  	fg = colors[1];
+    bg = colors[0],
+    fg = colors[1];
+
     exec(user, bg, fg);
   }
-  
-  function exec(user, bg, fg) {
-    var abbrev = {
-    	1e3: "K",
-    	1e6: "M"
-    };
-    
-    $("body").css("background-color", bg);
-    $("body .card .count, body .card span, body .card .icon i.fa").css("color", fg);
-    
-    aja()
-    	.method("GET")
-    	.url('http://api.soundcloud.com/users/'+user+'?consumer_key=8bcccc3476eaa137a084c9f0c041915f')
-    	.on('200', function(res) {
-    		var followersCount = res.followers_count;
-    		Object.keys(abbrev).map(function(k) {
-    			k = +k;
-    			if (followersCount > k) {
-    				var a = followersCount / k,
-    					 short = a.toString().length > 3 ? Math.round(a * 10) / 10 : a;
-    				followersCount = short + abbrev[k];
-    			}
-    		});
-    		if (followersCount !== undefined) {
-    			$(".card .count").text(followersCount);
-    			$(".card").addClass("visible");
-    		}
-     	})
-    	.go();
+});
+
+function exec(user, bg, fg) {
+  $("body").css("background-color", bg);
+  $("body .card .count, body .card span, body .card .icon i.fa").css("color", fg);
+
+  $("#loader").attr("src", "https://api.soundcloud.com/users/" + user + "/?client_id=8bcccc3476eaa137a084c9f0c041915f&callback=onRes");
+}
+
+var abbrev = {
+  1e3: "K",
+  1e6: "M"
+};
+
+function onRes(res) {
+  var followersCount = res.followers_count;
+  Object.keys(abbrev).map(function(k) {
+    k = +k;
+    if (followersCount > k) {
+      var a = followersCount / k,
+         short = a.toString().length > 3 ? Math.round(a * 10) / 10 : a;
+      followersCount = short + abbrev[k];
+    }
+  });
+  if (followersCount !== undefined) {
+    $(".card .count").text(followersCount);
+    $(".card").addClass("visible");
   }
-})();
+}
     
 </script>
+<script id="loader"></script>
 
 </body>
 
