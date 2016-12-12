@@ -1,3 +1,5 @@
-# soundcloud-followers-count
+# sc-fc: soundcloud followers count widget
 
-Everything is in the [gh-pages branch](https://github.com/jczimm/sc-fc/tree/gh-pages).
+Card that shows SoundCloud follower count using the SoundCloud REST API.
+
+Does not update live.
